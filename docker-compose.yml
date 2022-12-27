@@ -1,0 +1,29 @@
+version: "3"
+services:
+  postgres-userapp:
+    container_name: postgres-userapp
+    image: postgres
+    environment:
+      POSTGRES_DB: userInfosDb
+      POSTGRES_USER: userapp-user
+      POSTGRES_PASSWORD: 123456
+      PGDATA: /data/postgres
+    volumes:
+      - ./postgres-userapp:/data/postgres
+    expose:
+      - "5432"
+    ports:
+      - "5432:5432"
+    command: -p 5432
+    restart: unless-stopped
+
+  sqlserver-userapp:
+    container_name: sqlserver-userapp
+    image: 'mcr.microsoft.com/mssql/server'
+    ports:
+        - '1433:1433'
+    environment:
+        - ACCEPT_EULA=Y
+        - SA_PASSWORD=JeffFill12egar.
+    volumes:
+        - '/sqlserver-userapp:/data/sqlserver'

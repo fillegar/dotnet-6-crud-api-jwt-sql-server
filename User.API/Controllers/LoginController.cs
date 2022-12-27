@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using User.API.CustomExceptions;
 using User.API.Handler;
 using User.Core;
 using User.Core.Model;
@@ -14,8 +15,8 @@ namespace User.API.Controllers
     public class LoginController : ControllerBase
     {
         private readonly UserInfoService userInfoService;
-        private readonly TokenCreationHandler tokenHandler;
-        public LoginController(UserInfoService userInfoService, TokenCreationHandler tokenHandler)
+        private readonly TokenUtilsHandler tokenHandler;
+        public LoginController(UserInfoService userInfoService, TokenUtilsHandler tokenHandler)
         {
             this.userInfoService = userInfoService;
             this.tokenHandler = tokenHandler;
@@ -37,7 +38,7 @@ namespace User.API.Controllers
 
                 return token;
             }
-            return new Token();
+            throw new UserInfoNotFoundException("User not found with email: " + userLogin.Email);
         }
 
         

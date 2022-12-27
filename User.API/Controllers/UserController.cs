@@ -4,7 +4,6 @@ using User.Service;
 
 namespace User.API.Controllers
 {
-    [AutoValidateAntiforgeryToken]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -18,9 +17,9 @@ namespace User.API.Controllers
         }
 
         [HttpGet]
-        public List<UserInfo> getUserInfos()
+        public async Task<List<UserInfo>> getUserInfos()
         {
-            return _userInfoService.getUserInfos();
+            return await _userInfoService.getUserInfos();
         }
 
         [HttpPost]

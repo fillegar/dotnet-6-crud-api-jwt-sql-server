@@ -8,11 +8,11 @@ using User.Core;
 
 namespace User.API.Handler
 {
-    public class TokenCreationHandler
+    public class TokenUtilsHandler
     {
         private readonly IConfiguration configuration;
 
-        public TokenCreationHandler(IConfiguration configuration)
+        public TokenUtilsHandler(IConfiguration configuration)
         {
             this.configuration = configuration;
         }
@@ -45,6 +45,37 @@ namespace User.API.Handler
             createRefreshToken(tokenInstance);
 
             return tokenInstance;
+        }
+
+        public string ValidateToken(string token)
+        {
+            if (token == null)
+                return "";
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            try
+            {
+                tokenHandler.ValidateToken(token, new TokenValidationParameters
+                {
+                    ValidIssuer = configuration["Jwt:Issuer"],
+                    ValidAudience = configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey
+        (Encoding.UTF8.GetBytes(configuration["Jwt:Key"])),
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = false,
+                    ValidateIssuerSigningKey = true
+                }, out SecurityToken validatedToken);
+
+                var jwtToken = (JwtSecurityToken)validatedToken;
+                var email = jwtToken.Claims.First(x => x.Type == "Email").Value;
+
+                return email;
+            }
+            catch
+            {
+                return string.Empty;
+            }
         }
 
         private void createRefreshToken(Token tokenInstance)

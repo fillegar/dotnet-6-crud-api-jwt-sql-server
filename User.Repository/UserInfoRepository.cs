@@ -12,11 +12,11 @@ namespace User.Repository
         }
 
 
-        public List<UserInfo> Get()
+        public async Task<List<UserInfo>> Get()
         {
             try
             {
-                return _context.UserInfos.ToList();
+                return await _context.UserInfos.ToListAsync();
             }
             catch (Exception ex)
             {

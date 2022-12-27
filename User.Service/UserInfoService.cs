@@ -16,9 +16,9 @@ namespace User.Service
             return await _userInfoRepository.getUserInfoByEmail(email);
         }
 
-        public List<UserInfo> getUserInfos()
+        public async Task<List<UserInfo>> getUserInfos()
         {
-            return _userInfoRepository.Get();
+            return await _userInfoRepository.Get();
         }
 
         public void addUserInfo(UserInfo userInfo)
